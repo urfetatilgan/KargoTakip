@@ -1,8 +1,10 @@
 package com.example.kargotakip;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +13,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -18,16 +22,38 @@ public class MainActivity extends AppCompatActivity {
     Button buttonGiris;
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
+    private static final int MY_PERMISSIONS_REQUEST_RECEIVE_SMS = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)!= PackageManager.PERMISSION_GRANTED){
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.RECEIVE_SMS)){
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS},MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
+            }
+        }
+
         username = findViewById(R.id.editTextTextPersonName);
         password = findViewById(R.id.editTextTextPassword);
         buttonGiris = findViewById(R.id.buttonGiris);
         sp=getSharedPreferences("GirisBilgi",MODE_PRIVATE);
         editor=sp.edit();
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_RECEIVE_SMS:{
+                if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(this,"thx!!",Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(this, "sorry!!", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        }
     }
     public void login(View view){
         if(username.getText().toString().equals("admin") && password.getText().toString().equals("12345")){

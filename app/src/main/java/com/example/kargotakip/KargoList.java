@@ -19,7 +19,7 @@ public class KargoList extends AppCompatActivity {
     RecyclerView rvCargo;
     String cargoID = "";
     ArrayList<Cargo> cargoList = new ArrayList<>();
-
+    MyReceiver myReceiver = new MyReceiver();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
