@@ -59,33 +59,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.close();
     }
-    public void onReceive(Context context, Intent intent) {
-        Log.i(TAG,"Intent Received:"+ intent.getAction());
-        if (intent.getAction()==SMS_RECEIVED){
-            Bundle dataBundle = intent.getExtras();
-            if(dataBundle!=null){
-                Object[] mypdu = (Object[]) dataBundle.get("pdus");
-                final SmsMessage[] message = new SmsMessage[mypdu.length];
-                for (int i=0; i< mypdu.length; i++){
-                    //int i=0;
-                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
-                        String format = dataBundle.getString("format");
-                        message[i] = SmsMessage.createFromPdu((byte[])mypdu[i], format);
-                    }else{
-                        message[i] = SmsMessage.createFromPdu((byte[])mypdu[i]);
-                    }
-                    msg = msg.concat(message[i].getMessageBody());
-                    phoneNo = message[i].getOriginatingAddress();
-                    if(i==0){
 
-                        msg2 = msg.split(" ");
-                    }
-                }
-                addCargo(msg);
-                Toast.makeText(context,"Mesaj: "+msg+"\nNumber: "+phoneNo+"\nKargoTakipNo: "+msg2[0],Toast.LENGTH_LONG).show();
-            }
-        }
-    }
     public void deleteCargo(String cargoID) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(TablesInfo.CargoEntry.TABLE_NAME, TablesInfo.CargoEntry.COLUMN_ID + "=?", new String[]{cargoID});
