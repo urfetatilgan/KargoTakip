@@ -4,13 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="5dp"
+    android:layout_margin="0dp"
+    android:background="@color/black"
     tools:context=".KargoList">
 
-    <EditText
+    <TextView
         android:id="@+id/et_Cargo"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:padding="5dp"
+        android:textColor="@color/white"
         android:hint="Kargo.." />
 
     <LinearLayout
@@ -32,16 +35,7 @@
             android:text="LİSTELE"
             android:textColor="@android:color/white" />
 
-        <Button
-            android:id="@+id/btn_Add"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginEnd="1dp"
-            android:layout_weight="1"
-            android:background="@color/black"
-            android:onClick="btn_Save_Click"
-            android:text="KAYDET"
-            android:textColor="@android:color/white" />
+
 
         <Button
             android:id="@+id/btn_Delete"
@@ -60,8 +54,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@color/black"
-
-            android:text="DÜZENLE"
+            android:text="GÖRÜNTÜLE"
             android:textColor="@android:color/white" />
     </LinearLayout>
 
