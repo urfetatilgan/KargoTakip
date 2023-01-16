@@ -16,6 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+import com.chaquo.python.android.AndroidPlatform;
+
 public class MainActivity extends AppCompatActivity {
 
     EditText username, password;
@@ -34,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS},MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
             }
         }
+        if (! Python.isStarted()) {
+            Python.start(new AndroidPlatform(this));
+        }
+
+
 
         username = findViewById(R.id.editTextTextPersonName);
         password = findViewById(R.id.editTextTextPassword);

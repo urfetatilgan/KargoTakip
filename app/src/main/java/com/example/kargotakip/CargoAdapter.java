@@ -33,8 +33,12 @@ public class CargoAdapter extends RecyclerView.Adapter<CargoAdapter.ViewHolder> 
         holder.cargo_no.setText(mList.get(position).getCargo_no());
         holder.cargo_name.setText(mList.get(position).getCargo_name());
         holder.cargo_status.setText(mList.get(position).getCargo_status());
-        if(mList.get(position).getCargo_name()=="ARAS KARGO"){
+        if(mList.get(position).getCargo_name().contains("ARAS")){
             holder.cargo_iv.setImageResource(R.drawable.aras);
+        }else if(mList.get(position).getCargo_name().contains("MNG")){
+            holder.cargo_iv.setImageResource(R.drawable.mng);
+        }else if(mList.get(position).getCargo_name().contains("SURAT")){
+            holder.cargo_iv.setImageResource(R.drawable.surat);
         }
     }
 

@@ -83,7 +83,67 @@ public class MyReceiver extends BroadcastReceiver {
                     if (tmpMsg.contains("teslim ettik.")) {
                         cargo.setCargo_status("Teslim edildi");
                     } else if (tmpMsg.contains("Yoldayız,")) {
-                        cargo.setCargo_status("Yola Çıktı");
+                        cargo.setCargo_status("Dağıtıma Çıktı");
+                    }
+                    db.addCargo(cargo);
+                }else if(phoneNo.contains("MNG")){
+                    if(tmpMsg.contains("dağıtıma") ){
+                        for(int i = 0; i<db.getCargoList().size(); i++){
+                            if(db.getCargoList().get(i).getCargo_no().contains(msg2[0])){
+                                find = true;
+                                db.deleteCargo(String.valueOf(i+1));
+                                findTmp = i;
+                            }
+                        }
+                        findTmp1 = msg2[0];
+                    }else if(tmpMsg.contains("teslim edilmiştir.") ){
+                        for(int i = 0; i<db.getCargoList().size(); i++){
+                            if(db.getCargoList().get(i).getCargo_no().contains(msg2[0])){
+                                find = true;
+                                db.deleteCargo(String.valueOf(i+1));
+                                findTmp = i;
+                            }
+                        }
+                        findTmp1 = msg2[0];
+                    }
+                    Integer size = db.getCargoList().size() + 1;
+                    cargo.setCargo_id(size.toString());
+                    cargo.setCargo_name(phoneNo);
+                    cargo.setCargo_no(findTmp1);
+                    if (tmpMsg.contains("teslim edilmiştir.")) {
+                        cargo.setCargo_status("Teslim edildi");
+                    } else if (tmpMsg.contains("dağıtıma")) {
+                        cargo.setCargo_status("Dağıtıma Çıktı");
+                    }
+                    db.addCargo(cargo);
+                }else if(phoneNo.contains("SURAT")){
+                    if(tmpMsg.contains("dagitima") ){
+                        for(int i = 0; i<db.getCargoList().size(); i++){
+                            if(db.getCargoList().get(i).getCargo_no().contains(msg2[5])){
+                                find = true;
+                                db.deleteCargo(String.valueOf(i+1));
+                                findTmp = i;
+                            }
+                        }
+                        findTmp1 = msg2[5];
+                    }else if(tmpMsg.contains("teslim edilmiştir.") ){
+                        for(int i = 0; i<db.getCargoList().size(); i++){
+                            if(db.getCargoList().get(i).getCargo_no().contains(msg2[5])){
+                                find = true;
+                                db.deleteCargo(String.valueOf(i+1));
+                                findTmp = i;
+                            }
+                        }
+                        findTmp1 = msg2[5];
+                    }
+                    Integer size = db.getCargoList().size() + 1;
+                    cargo.setCargo_id(size.toString());
+                    cargo.setCargo_name(phoneNo);
+                    cargo.setCargo_no(findTmp1);
+                    if (tmpMsg.contains("teslim edilmiştir.")) {
+                        cargo.setCargo_status("Teslim edildi");
+                    } else if (tmpMsg.contains("dagitima")) {
+                        cargo.setCargo_status("Dağıtıma Çıktı");
                     }
                     db.addCargo(cargo);
                 }

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +15,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.chaquo.python.PyObject;
+import com.chaquo.python.Python;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class KargoList extends AppCompatActivity {
@@ -95,5 +104,30 @@ public class KargoList extends AppCompatActivity {
             F_GetList();
         } else
             Toast.makeText(getApplicationContext(), "Lütfen silinecek kargoyu seçiniz", Toast.LENGTH_SHORT).show();
+    }
+    public void btn_Goster(View view){
+        DBHelper db = new DBHelper(getApplicationContext());
+        cargoList = db.getCargoList();
+        String name = "";
+        for(int i=0; i<cargoList.size(); i++){
+            if(cargoList.get(i).getCargo_id().equals(cargoID)){
+                name = cargoList.get(i).getCargo_name();
+            }
+        }
+        if(name.contains("ARAS")){
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://www.araskargo.com.tr/tr/")));
+        }else if(name.contains("MNG")){
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://www.mngkargo.com.tr/gonderitakip")));
+        }else if(name.contains("SURAT")){
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://www.mngkargo.com.tr/gonderitakip")));
+        }
+        Python py = Python.getInstance();
+        PyObject pyObj = py.getModule("webscrape");
+
+        //PyObject obj = pyObj.callAttr("arasBot", cargoList.get(0).getCargo_no());
+        //etCargo.setText(obj.toString());
     }
 }
