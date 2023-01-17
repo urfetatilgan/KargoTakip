@@ -11,7 +11,6 @@ import android.util.Log;
 import java.util.ArrayList;
 
 public class DBHelper extends SQLiteOpenHelper {
-
     public static final String DATABASE_NAME = "my_cargo.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -38,15 +37,17 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addCargo(String cargo) {
+    public void addCargo(Cargo cargo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(TablesInfo.CargoEntry.COLUMN_NO, cargo.trim());
-
+        cv.put(TablesInfo.CargoEntry.COLUMN_ID, cargo.getCargo_id());
+        cv.put(TablesInfo.CargoEntry.COLUMN_NO, cargo.getCargo_no());
+        cv.put(TablesInfo.CargoEntry.COLUMN_NAME, cargo.getCargo_name());
+        cv.put(TablesInfo.CargoEntry.COLUMN_STATUS, cargo.getCargo_status());
         long result = db.insert(TablesInfo.CargoEntry.TABLE_NAME, null, cv);
 
         if (result > -1)
-            Log.i("DBHelper", "Kargo başarıyla kaydedildi");
+            Log.i("DBHelper", "Kargo başarıyla kaydedildi "+ cv);
         else
             Log.i("DBHelper", "Kargo kaydedilemedi");
 
