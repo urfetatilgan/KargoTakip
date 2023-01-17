@@ -10,6 +10,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+
 import java.util.ArrayList;
 
 public class KargoList extends AppCompatActivity {
@@ -17,6 +22,7 @@ public class KargoList extends AppCompatActivity {
     EditText etCargo;
     Button btnSave, btnList, btnDelete, btnEdit;
     RecyclerView rvCargo;
+    GoogleSignInClient mGoogleSignInClient;
     String cargoID = "";
     ArrayList<Cargo> cargoList = new ArrayList<>();
 
@@ -24,12 +30,27 @@ public class KargoList extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kargo_list);
-
         definitions();
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
+        if (acct != null) {
+            String personName = acct.getDisplayName();
+            String personGivenName = acct.getGivenName();
+            String personFamilyName = acct.getFamilyName();
+            String personEmail = acct.getEmail();
+            String token= acct.getIdToken();
+            etCargo.setText(token);
+            String personId = acct.getId();
+        }
+
     }
 
     private void definitions() {
         etCargo = findViewById(R.id.et_Cargo);
+
         btnDelete = findViewById(R.id.btn_Delete);
         btnEdit = findViewById(R.id.btn_Edit);
         btnList = findViewById(R.id.btn_List);
