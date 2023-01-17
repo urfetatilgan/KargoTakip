@@ -12,6 +12,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -32,9 +36,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.chaquo.python.PyObject;
-import com.chaquo.python.Python;
-import com.chaquo.python.android.AndroidPlatform;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,6 +44,17 @@ public class MainActivity extends AppCompatActivity {
     Button buttonGiris;
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
+    ActivityResultLauncher<Intent> startForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if(result.getResultCode()==RESULT_OK){
+                Intent data = result.getData();
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                handleSignInResult(task);
+            }
+        }
+    });
+
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
     private static final int MY_PERMISSIONS_REQUEST_RECEIVE_SMS = 0;
@@ -75,9 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS},MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
             }
         }
-        if (! Python.isStarted()) {
-            Python.start(new AndroidPlatform(this));
-        }
+
 
 
 
@@ -110,18 +121,50 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void login(View view){
-        if(username.getText().toString().equals("admin") && password.getText().toString().equals("12345")){
-            editor.putString("username",username.getText().toString());
-            editor.putString("password",password.getText().toString());
-            editor.commit();
+        //        if(username.getText().toString().equals("admin") && password.getText().toString().equals("12345")){
+//            editor.putString("username",username.getText().toString());
+//            editor.putString("password",password.getText().toString());
+//            editor.commit();
+//        Toast.makeText(getApplicationContext(), "Giriş Yaptınız",Toast.LENGTH_LONG).show();
+//
+//        }else{
+//            Toast.makeText(getApplicationContext(), "Hatalı Giriş Yaptınız",Toast.LENGTH_LONG).show();
+//        }
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startForResult.launch(signInIntent);
+//        startActivityForResult(signInIntent, 1000);
 
-            startActivity(new Intent(MainActivity.this, KargoList.class));
-
-            Toast.makeText(getApplicationContext(), "Giriş Yaptınız",Toast.LENGTH_LONG).show();
-
-        }else{
-            Toast.makeText(getApplicationContext(), "Hatalı Giriş Yaptınız",Toast.LENGTH_LONG).show();
-        }
+//        finish();
+//        startActivity(new Intent(MainActivity.this, KargoList.class));
+    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+//        if (requestCode == 1000) {
+////            mGoogleSignInClient.silentSignIn()
+////                    .addOnCompleteListener(
+////                            this,
+////                            new OnCompleteListener<GoogleSignInAccount>() {
+////                                @Override
+////                                public void onComplete(@NonNull Task<GoogleSignInAccount> task) {
+////                                    handleSignInResult(task);
+////                                }
+////                            });
+//            // The Task returned from this call is always completed, no need to attach
+//            // a listener.
+//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+//            handleSignInResult(task);
+//        }
+//    }
+    public void logout(View view){
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        // ...
+                    }
+                });
     }
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
@@ -136,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call<Void> call, Response<Void> response) {
                     if (response.code() == 200) {
+                        startActivity(new Intent(MainActivity.this, KargoList.class));
                         Toast.makeText(MainActivity.this,
                                 "Signed up successfully", Toast.LENGTH_LONG).show();
                     } else if (response.code() == 400) {

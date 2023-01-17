@@ -14,14 +14,15 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
-        python {
-            buildPython "C:/Users/urfet/AppData/Local/Programs/Python/Python310/python.exe"
-            pip{
-                install "selenium"
-                install "webdriver_manager"
-                install "packaging"
-            }
-        }
+//        python {
+//            buildPython "C:/Users/Enes/AppData/Local/Programs/Python/Python38/python.exe"
+//
+//            pip{
+//                install "selenium"
+//                install "webdriver_manager"
+//                install "packaging"
+//            }
+//        }
         sourceSets {
             main {
                 python.srcDir "src/main/python"
