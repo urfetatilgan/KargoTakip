@@ -3,17 +3,19 @@ package com.example.kargotakip;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.telephony.SmsMessage;
 import android.util.Log;
+import android.widget.Toast;
 
 public class MyReceiver extends BroadcastReceiver {
 
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     private static final String TAG = "SmsBroadcastReceiver";
-    public static final String DATABASE_NAME = "my_cargo.db";
-    private static final int DATABASE_VERSION = 1;
     String msg ="", phoneNo = "", tmpMsg = "";
     String[] msg2;
 
@@ -23,9 +25,10 @@ public class MyReceiver extends BroadcastReceiver {
         DBHelper db = new DBHelper(context);
         boolean find = false;
         int findTmp = 0;
+        int size;
         String findTmp1 = "";
         Log.i(TAG,"Intent Received:"+ intent.getAction());
-        if (intent.getAction()==SMS_RECEIVED){
+        if (intent.getAction().equals(SMS_RECEIVED)){
             Bundle dataBundle = intent.getExtras();
             if(dataBundle!=null){
                 Object[] mypdu = (Object[]) dataBundle.get("pdus");
@@ -41,6 +44,17 @@ public class MyReceiver extends BroadcastReceiver {
                     msg = msg.concat(message[i].getMessageBody());
                     tmpMsg = msg;
                     phoneNo = message[i].getOriginatingAddress();
+                    Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNo));
+                    Cursor c = context.getContentResolver().query(lookupUri, new String[]{ContactsContract.Data.DISPLAY_NAME},null,null,null);
+                    try {
+                        c.moveToFirst();
+                        String  displayName = c.getString(0);
+                        phoneNo = displayName;
+                        //Toast.makeText(context, ContactName, Toast.LENGTH_LONG).show();
+
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
                     if(i==0){
 
                         msg2 = msg.split(" ");
@@ -76,8 +90,8 @@ public class MyReceiver extends BroadcastReceiver {
                         db.getCargoList().get(findTmp).setCargo_status("Teslimata Çıktı");
                     }
                 }else {*/
-                    Integer size = db.getCargoList().size() + 1;
-                    cargo.setCargo_id(size.toString());
+                    size = db.getCargoList().size() + 1;
+                    cargo.setCargo_id(String.valueOf(size));
                     cargo.setCargo_name(phoneNo);
                     cargo.setCargo_no(findTmp1);
                     if (tmpMsg.contains("teslim ettik.")) {
@@ -106,8 +120,8 @@ public class MyReceiver extends BroadcastReceiver {
                         }
                         findTmp1 = msg2[0];
                     }
-                    Integer size = db.getCargoList().size() + 1;
-                    cargo.setCargo_id(size.toString());
+                    size = db.getCargoList().size() + 1;
+                    cargo.setCargo_id(String.valueOf(size));
                     cargo.setCargo_name(phoneNo);
                     cargo.setCargo_no(findTmp1);
                     if (tmpMsg.contains("teslim edilmiştir.")) {
@@ -136,8 +150,8 @@ public class MyReceiver extends BroadcastReceiver {
                         }
                         findTmp1 = msg2[5];
                     }
-                    Integer size = db.getCargoList().size() + 1;
-                    cargo.setCargo_id(size.toString());
+                    size = db.getCargoList().size() + 1;
+                    cargo.setCargo_id(String.valueOf(size));
                     cargo.setCargo_name(phoneNo);
                     cargo.setCargo_no(findTmp1);
                     if (tmpMsg.contains("teslim edilmiştir.")) {
@@ -148,7 +162,7 @@ public class MyReceiver extends BroadcastReceiver {
                     db.addCargo(cargo);
                 }
                 //}
-                //Toast.makeText(context,"Mesaj: "+msg+"\nNumber: "+phoneNo+"\nKargoTakipNo: "+msg2[0],Toast.LENGTH_LONG).show();
+                Toast.makeText(context,"Mesaj: "+msg+"\nNumber: "+phoneNo+"\nKargoTakipNo: "+msg2[0],Toast.LENGTH_LONG).show();
             }
         }
     }
