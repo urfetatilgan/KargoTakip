@@ -1,11 +1,14 @@
 const express = require('express');
 const controllers=require('../controller/MailController');
+const authcontrollers=require('../controller/authcontroller');
 const router = express.Router();
 
-router.get('/mail/user/:email',controllers.getUser)
+router.get('/mail/user',authcontrollers.getUser)
 router.get('/mail/send',controllers.sendMail);
-router.get('/mail/drafts/:email', controllers.getDrafts);
-router.get('/mail/read/:messageId', controllers.readMail);
-router.post('/mail/user/tokenId',controllers.getId)
+router.post('/mail/user/tokenId',authcontrollers.getId)
+router.get('/mail/user/Trendyol',authcontrollers.getMails)
+router.get('/cargos',authcontrollers.getCargos)
+router.post('/cargo/add',authcontrollers.insertCargo)
+
 
 module.exports = router;
