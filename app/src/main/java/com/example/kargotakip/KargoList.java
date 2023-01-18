@@ -104,9 +104,16 @@ public class KargoList extends AppCompatActivity {
                         Log.i("TAG"   , "onResponse: ");
                         ArrayList<Cargo> data = new ArrayList<>();
                         for(CargoResults cargo : response.body()){
-                            Cargo savedCargo = new Cargo(cargo.cargoId.toString(),cargo.cargoName,cargo.cargoNo,cargo.cargoStatus);
-                            savedCargo.setCargo_date(cargo.cargoDate);
-                            cargoArrayList.add(savedCargo);
+                            Cargo savedCargo= null;
+                            if(cargo.cargoStatus.equals("1")){
+                                savedCargo = new Cargo(cargo.cargoId.toString(),cargo.cargoName,cargo.cargoNo,"Teslim edildi");
+                                savedCargo.setCargo_date(cargo.cargoDate);
+                                cargoArrayList.add(savedCargo);
+                            }else{
+                               savedCargo = new Cargo(cargo.cargoId.toString(),cargo.cargoName,cargo.cargoNo,"Yoldayız");
+                                savedCargo.setCargo_date(cargo.cargoDate);
+                                cargoArrayList.add(savedCargo);
+                            }
                         }
                         CargoAdapter adp = new CargoAdapter(getApplicationContext(), cargoArrayList);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());

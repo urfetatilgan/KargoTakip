@@ -183,6 +183,7 @@ public class MyReceiver extends BroadcastReceiver {
                 if(!insertedCargo.cargoDate.equals(null)){
                     insertedCargo.setCargoName(cargo.getCargo_name());
                     insertedCargo.setCargoNo(cargo.getCargo_no());
+                    insertedCargo.setCargoFrom("0");//From Sms
                     try {
                         Call<Void> call = retrofitInterface.insertCargo(insertedCargo);
                         call.enqueue(new Callback<Void>() {
@@ -192,10 +193,8 @@ public class MyReceiver extends BroadcastReceiver {
                                 } else if (response.code() == 400) {
                                 }
                             }
-
                             @Override
                             public void onFailure(Call<Void> call, Throwable t) {
-
                             }
                         });
                     }catch (Exception e){

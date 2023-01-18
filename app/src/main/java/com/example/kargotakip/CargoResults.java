@@ -23,6 +23,10 @@ public class CargoResults {
     @SerializedName("cargo_status")
     @Expose
     public String cargoStatus;
+    @SerializedName("cargo_from")
+    @Expose
+    public String cargoFrom;
+
 
     public CargoResults(String cargoName, String cargoNo, String cargoStatus) {
         this.cargoName = cargoName;
@@ -69,4 +73,11 @@ public class CargoResults {
         this.cargoStatus = cargoStatus;
     }
 
+    public String getCargoFrom() {
+        return cargoFrom;
+    }
+
+    public void setCargoFrom(String cargoFrom) {
+        this.cargoFrom = cargoFrom;
+    }
 }
