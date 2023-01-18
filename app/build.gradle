@@ -14,14 +14,15 @@ android {
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
-        python {
-            buildPython "C:/Users/urfet/AppData/Local/Programs/Python/Python310/python.exe"
-            pip{
-                install "selenium"
-                install "webdriver_manager"
-                install "packaging"
-            }
-        }
+//        python {
+//            buildPython "C:/Users/Enes/AppData/Local/Programs/Python/Python38/python.exe"
+//
+//            pip{
+//                install "selenium"
+//                install "webdriver_manager"
+//                install "packaging"
+//            }
+//        }
         sourceSets {
             main {
                 python.srcDir "src/main/python"
@@ -48,6 +49,10 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'com.google.android.gms:play-services-auth:20.4.0'
+    implementation 'com.android.volley:volley:1.2.1'
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'

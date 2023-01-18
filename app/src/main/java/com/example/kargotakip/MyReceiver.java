@@ -11,18 +11,38 @@ import android.provider.ContactsContract;
 import android.telephony.SmsMessage;
 import android.util.Log;
 import android.widget.Toast;
+import android.widget.Toast;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MyReceiver extends BroadcastReceiver {
 
     private static final String SMS_RECEIVED = "android.provider.Telephony.SMS_RECEIVED";
     private static final String TAG = "SmsBroadcastReceiver";
+    public static final String DATABASE_NAME = "my_cargo.db";
+    private static final int DATABASE_VERSION = 1;
     String msg ="", phoneNo = "", tmpMsg = "";
     String[] msg2;
-
+    CargoResults insertedCargo= new CargoResults("","","");
     Cargo cargo = new Cargo("","","","");
+    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     @Override
     public void onReceive(Context context, Intent intent) {
         DBHelper db = new DBHelper(context);
+        retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        retrofitInterface = retrofit.create(RetrofitInterface.class);
         boolean find = false;
         int findTmp = 0;
         int size;
@@ -94,9 +114,13 @@ public class MyReceiver extends BroadcastReceiver {
                     cargo.setCargo_id(String.valueOf(size));
                     cargo.setCargo_name(phoneNo);
                     cargo.setCargo_no(findTmp1);
+                    String date = df.format(Calendar.getInstance().getTime());
+                    insertedCargo.setCargoDate(date);
                     if (tmpMsg.contains("teslim ettik.")) {
+                        insertedCargo.setCargoStatus("1");
                         cargo.setCargo_status("Teslim edildi");
                     } else if (tmpMsg.contains("Yoldayız,")) {
+                        insertedCargo.setCargoStatus("0");
                         cargo.setCargo_status("Dağıtıma Çıktı");
                     }
                     db.addCargo(cargo);
@@ -124,9 +148,13 @@ public class MyReceiver extends BroadcastReceiver {
                     cargo.setCargo_id(String.valueOf(size));
                     cargo.setCargo_name(phoneNo);
                     cargo.setCargo_no(findTmp1);
+                    String date = df.format(Calendar.getInstance().getTime());
+                    insertedCargo.setCargoDate(date);
                     if (tmpMsg.contains("teslim edilmiştir.")) {
+                        insertedCargo.setCargoStatus("1");
                         cargo.setCargo_status("Teslim edildi");
                     } else if (tmpMsg.contains("dağıtıma")) {
+                        insertedCargo.setCargoStatus("0");
                         cargo.setCargo_status("Dağıtıma Çıktı");
                     }
                     db.addCargo(cargo);
@@ -154,15 +182,40 @@ public class MyReceiver extends BroadcastReceiver {
                     cargo.setCargo_id(String.valueOf(size));
                     cargo.setCargo_name(phoneNo);
                     cargo.setCargo_no(findTmp1);
+                    String date = df.format(Calendar.getInstance().getTime());
+                    insertedCargo.setCargoDate(date);
                     if (tmpMsg.contains("teslim edilmiştir.")) {
+                        insertedCargo.setCargoStatus("1");
                         cargo.setCargo_status("Teslim edildi");
                     } else if (tmpMsg.contains("dagitima")) {
+                        insertedCargo.setCargoStatus("0");
                         cargo.setCargo_status("Dağıtıma Çıktı");
                     }
                     db.addCargo(cargo);
                 }
+                if(!insertedCargo.cargoDate.equals(null)){
+                    insertedCargo.setCargoName(cargo.getCargo_name());
+                    insertedCargo.setCargoNo(cargo.getCargo_no());
+                    insertedCargo.setCargoFrom("0");//From Sms
+                    try {
+                        Call<Void> call = retrofitInterface.insertCargo(insertedCargo);
+                        call.enqueue(new Callback<Void>() {
+                            @Override
+                            public void onResponse(Call<Void> call, Response<Void> response) {
+                                if (response.code() == 200) {
+                                } else if (response.code() == 400) {
+                                }
+                            }
+                            @Override
+                            public void onFailure(Call<Void> call, Throwable t) {
+                            }
+                        });
+                    }catch (Exception e){
+                        Log.i("TAG", "error: "+e.toString());
+                    }
+                }
                 //}
-                Toast.makeText(context,"Mesaj: "+msg+"\nNumber: "+phoneNo+"\nKargoTakipNo: "+msg2[0],Toast.LENGTH_LONG).show();
+                //Toast.makeText(context,"Mesaj: "+msg+"\nNumber: "+phoneNo+"\nKargoTakipNo: "+msg2[0],Toast.LENGTH_LONG).show();
             }
         }
     }
