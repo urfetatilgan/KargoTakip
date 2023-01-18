@@ -55,7 +55,6 @@ async function getId(req,res){
 
         const credentials = await loadSavedCredentialsIfExist()
         const { tokens } = await oAuthclient.getToken(authCode);
-
         if(tokens.refresh_token!=null){
           let savedTokens= JSON.stringify({
             refresh_token: tokens.refresh_token,
@@ -101,44 +100,72 @@ async function getUser(req, res) {
 
 async function insertCargo(req, res) {
     try {
-      const cargo = await Cargo.create(
-        req.body
-      );
-      res.status(200).send()
+      let control =0
+      const cargoCheck = await Cargo.findAll({where:{cargo_no:req.body.cargo_no}})
+      if(cargoCheck.length===0){
+        const cargo = await Cargo.create(
+          req.body
+        );
+        res.status(200).send()
+      }else{
+        for(let i=0;i<cargoCheck.length;i++){
+          if(cargoCheck[i].cargo_status===req.body.cargo_status){
+            control =1 
+          }
+        }
+        if(control!=1){
+          const cargo = await Cargo.create(
+            req.body
+          );
+          res.status(200).send()
+        }else{
+          res.status(400).send()
+        }
+      }
     } catch (error) {
       console.log(error);
       res.send(error);
     }
   }
 
-  async function updateCargo(req, res) {
-    try {
-      const cargo = await Cargo.update(
-        req.body
-      );
-      res.status(200).send()
-    } catch (error) {
-      console.log(error);
-      res.send(error);
-    }
-  }  
-
 async function getCargos(req,res){
   try {
-
-    const cargos = await Cargo.findAll();
+    const cargos = await Cargo.findAll({
+     order:[ 
+      ["cargo_no",'DESC'],
+      ["cargo_status",'DESC'],
+    ]
+    });
     if(cargos===null){
-      console.log("yapamadın")
+      res.status(400).send("Veri okunamadı.");
     }
-    res.json(cargos).status(200).send();
+    const Cargos = []
+    let count = 0
+    for(let i=0;i<cargos.length;i++){
+      if(count==0){
+        if(cargos[i].cargo_status=="1"){
+          Cargos.push(cargos[i])
+          count =1
+        }else{
+          Cargos.push(cargos[i])
+          count = 0
+        }
+      }else{
+        count =0
+      }
+    }
+    
+    res.json(Cargos).status(200).send();
   } catch (error) {
     console.log(error);
     res.status(400).send(error);
   }
 
 
+
+
 }     
-async function getMails(req, res) {
+async function getMailsTrendyol(req, res) {
   try {
     const content = await fs.readFile(TOKEN_PATH);
     const credentials = JSON.parse(content);
