@@ -10,13 +10,10 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.telephony.SmsMessage;
 import android.util.Log;
-import android.widget.Toast;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,10 +27,13 @@ public class MyReceiver extends BroadcastReceiver {
     private static final String TAG = "SmsBroadcastReceiver";
     public static final String DATABASE_NAME = "my_cargo.db";
     private static final int DATABASE_VERSION = 1;
+    private Retrofit retrofit;
+    private RetrofitInterface retrofitInterface;
+    private String BASE_URL = "https://afternoon-spire-41332.herokuapp.com";
     String msg ="", phoneNo = "", tmpMsg = "";
     String[] msg2;
     CargoResults insertedCargo= new CargoResults("","","");
-    Cargo cargo = new Cargo("","","","");
+    Cargo cargo = new Cargo("","","","","");
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -115,6 +115,7 @@ public class MyReceiver extends BroadcastReceiver {
                     cargo.setCargo_name(phoneNo);
                     cargo.setCargo_no(findTmp1);
                     String date = df.format(Calendar.getInstance().getTime());
+                    cargo.setCargo_date(date);
                     insertedCargo.setCargoDate(date);
                     if (tmpMsg.contains("teslim ettik.")) {
                         insertedCargo.setCargoStatus("1");
@@ -149,6 +150,7 @@ public class MyReceiver extends BroadcastReceiver {
                     cargo.setCargo_name(phoneNo);
                     cargo.setCargo_no(findTmp1);
                     String date = df.format(Calendar.getInstance().getTime());
+                    cargo.setCargo_date(date);
                     insertedCargo.setCargoDate(date);
                     if (tmpMsg.contains("teslim edilmiştir.")) {
                         insertedCargo.setCargoStatus("1");
@@ -184,6 +186,7 @@ public class MyReceiver extends BroadcastReceiver {
                     cargo.setCargo_no(findTmp1);
                     String date = df.format(Calendar.getInstance().getTime());
                     insertedCargo.setCargoDate(date);
+                    cargo.setCargo_date(date);
                     if (tmpMsg.contains("teslim edilmiştir.")) {
                         insertedCargo.setCargoStatus("1");
                         cargo.setCargo_status("Teslim edildi");

@@ -44,6 +44,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cv.put(TablesInfo.CargoEntry.COLUMN_NO, cargo.getCargo_no());
         cv.put(TablesInfo.CargoEntry.COLUMN_NAME, cargo.getCargo_name());
         cv.put(TablesInfo.CargoEntry.COLUMN_STATUS, cargo.getCargo_status());
+        cv.put(TablesInfo.CargoEntry.COLUMN_CREATE_DATE, cargo.getCargo_date());
         long result = db.insert(TablesInfo.CargoEntry.TABLE_NAME, null, cv);
 
         if (result > -1)
@@ -69,11 +70,12 @@ public class DBHelper extends SQLiteOpenHelper {
                 TablesInfo.CargoEntry.COLUMN_ID,
                 TablesInfo.CargoEntry.COLUMN_NAME,
                 TablesInfo.CargoEntry.COLUMN_NO,
-                TablesInfo.CargoEntry.COLUMN_STATUS};
+                TablesInfo.CargoEntry.COLUMN_STATUS,
+                TablesInfo.CargoEntry.COLUMN_CREATE_DATE};
 
         Cursor c = db.query(TablesInfo.CargoEntry.TABLE_NAME, projection, null, null, null, null, null);
         while (c.moveToNext()) {
-            data.add(new Cargo(c.getString(c.getColumnIndex(TablesInfo.CargoEntry.COLUMN_ID)), c.getString(c.getColumnIndex(TablesInfo.CargoEntry.COLUMN_NAME)), c.getString(c.getColumnIndex(TablesInfo.CargoEntry.COLUMN_NO)), c.getString(c.getColumnIndex(TablesInfo.CargoEntry.COLUMN_STATUS))));
+            data.add(new Cargo(c.getString(c.getColumnIndex(TablesInfo.CargoEntry.COLUMN_ID)), c.getString(c.getColumnIndex(TablesInfo.CargoEntry.COLUMN_NAME)), c.getString(c.getColumnIndex(TablesInfo.CargoEntry.COLUMN_NO)), c.getString(c.getColumnIndex(TablesInfo.CargoEntry.COLUMN_STATUS)), c.getString(c.getColumnIndex(TablesInfo.CargoEntry.COLUMN_CREATE_DATE))));
         }
 
         c.close();

@@ -1,7 +1,6 @@
 package com.example.kargotakip;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,6 +17,9 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -27,21 +29,20 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+
 import java.util.HashMap;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 
 
 public class MainActivity extends AppCompatActivity {
 
     EditText username, password;
-    Button buttonGiris;
+    Button buttonGiris, buttonGirisWoutGoogle;
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
     ActivityResultLauncher<Intent> startForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
-    private String BASE_URL = "http://10.0.2.2:5000";
+    private String BASE_URL = "https://afternoon-spire-41332.herokuapp.com";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,12 +96,10 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS},MY_PERMISSIONS_REQUEST_READ_CONTACT);
             }
         }
-        if (! Python.isStarted()) {
-            Python.start(new AndroidPlatform(this));
-        }
 
 
 
+        buttonGirisWoutGoogle = findViewById(R.id.buttonGirisWithoutGoogle);
         username = findViewById(R.id.editTextTextPersonName);
         password = findViewById(R.id.editTextTextPassword);
         buttonGiris = findViewById(R.id.buttonGiris);
@@ -130,6 +129,18 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    public void login_WithoutGoogle(View view){
+        if(username.getText().toString().equals("admin") && password.getText().toString().equals("12345")){
+            editor.putString("username",username.getText().toString());
+            editor.putString("password",password.getText().toString());
+            editor.commit();
+            Toast.makeText(getApplicationContext(), "Giriş Yaptınız",Toast.LENGTH_LONG).show();
+            startActivity(new Intent(MainActivity.this, KargoList.class));
+        }else{
+            Toast.makeText(getApplicationContext(), "Hatalı Giriş Yaptınız",Toast.LENGTH_LONG).show();
+        }
+    }
+
     public void login(View view){
         //        if(username.getText().toString().equals("admin") && password.getText().toString().equals("12345")){
 //            editor.putString("username",username.getText().toString());
