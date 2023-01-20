@@ -36,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Kargo"
+            android:textIsSelectable="true"
             android:textColor="@color/black"
             android:layout_below="@+id/tv_CargoName"
             android:gravity="center_vertical"

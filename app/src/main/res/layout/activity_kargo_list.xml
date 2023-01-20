@@ -12,6 +12,7 @@
         android:id="@+id/et_Cargo"
         android:layout_width="match_parent"
         android:layout_height="40dp"
+        android:textIsSelectable="true"
         android:textSize="20dp"
         android:layout_margin="5dp"
         android:padding="5dp"
