@@ -18,10 +18,13 @@ const Cargo = sequelize.define('Cargo',{
     cargo_name: DataTypes.STRING,
     cargo_no:DataTypes.STRING,
     cargo_date: {
-      type: DataTypes.DATE,
+      type: DataTypes.STRING,
       allowNull: false,
     },
     cargo_status:{
+      type:DataTypes.STRING
+    },
+    cargo_from:{
       type:DataTypes.STRING
     }
   },{
