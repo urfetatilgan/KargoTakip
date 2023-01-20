@@ -42,7 +42,7 @@ public class KargoList extends AppCompatActivity {
     String cargoID = "";
     private SharedPreferences sp;
     private SharedPreferences.Editor editor;
-    private boolean giris = true;
+    private String girisBilgi = "";
     ArrayList<Cargo> cargoList = new ArrayList<>();
     ArrayList<Cargo> cargoArrayList = new ArrayList<>();
     RelativeLayout relativeLayout;
@@ -56,11 +56,10 @@ public class KargoList extends AppCompatActivity {
         //F_GetList();
         sp=getSharedPreferences("GirisBilgi",MODE_PRIVATE);
         editor=sp.edit();
-        username = sp.getString("username", "kullanıcı adı yok");
-        password = sp.getString("password","şifre yok");
-        if (username.equals("admin") && password.equals("12345")){
-            giris = false;
-        }
+        //username = sp.getString("username", "kullanıcı adı yok");
+        //password = sp.getString("password","şifre yok");
+        girisBilgi = sp.getString("giris","bilgi yok");
+
         definitions();
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
@@ -103,7 +102,7 @@ public class KargoList extends AppCompatActivity {
         DBHelper db = new DBHelper(getApplicationContext());
         cargoList = db.getCargoList();
         cargoArrayList = new ArrayList<>();
-        if(giris){
+        if(girisBilgi.equals("0")){
             try{
                 Call<List<CargoResults>> call = retrofitInterface.doGetUserList();
                 call.enqueue(new Callback<List<CargoResults>>() {
@@ -161,7 +160,7 @@ public class KargoList extends AppCompatActivity {
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int i = viewHolder.getAdapterPosition();
             Cargo item;
-            if(giris){
+            if(girisBilgi.equals("0")){
                 item = cargoArrayList.get(i);
             }else{
                 item = cargoList.get(i);
@@ -184,7 +183,7 @@ public class KargoList extends AppCompatActivity {
 
     public void btn_Delete_Click(View view) {
         if (!cargoID.equals("")) {
-            if(!giris){
+            if(!girisBilgi.equals("0")){
                 DBHelper db = new DBHelper(getApplicationContext());
                 db.deleteCargo(cargoID);
                 db.close();
@@ -204,7 +203,7 @@ public class KargoList extends AppCompatActivity {
         cargoList = db.getCargoList();
 
         String name = "";
-        if(!giris){
+        if(!girisBilgi.equals("0")){
             for(int i=0; i<cargoList.size(); i++){
                 if(cargoList.get(i).getCargo_id().equals(cargoID)){
                     name = cargoList.get(i).getCargo_name();
