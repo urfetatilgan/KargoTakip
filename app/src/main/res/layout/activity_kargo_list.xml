@@ -66,6 +66,17 @@
             android:onClick="btn_Goster"
             android:text="GÖRÜNTÜLE"
             android:textColor="@android:color/black" />
+        <Button
+            android:id="@+id/btn_Refresh"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="2dp"
+            android:background="@color/white"
+            android:onClick="btn_Refresh"
+            android:text="YENİLE"
+            android:textColor="@android:color/black" />
+
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
