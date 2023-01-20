@@ -3,16 +3,17 @@ package com.example.kargotakip;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.telephony.SmsMessage;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,11 +29,11 @@ public class MyReceiver extends BroadcastReceiver {
     private static final int DATABASE_VERSION = 1;
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
-    private String BASE_URL = "http://10.0.2.2:5000";
+    private String BASE_URL = "https://afternoon-spire-41332.herokuapp.com";
     String msg ="", phoneNo = "", tmpMsg = "";
     String[] msg2;
     CargoResults insertedCargo= new CargoResults("","","");
-    Cargo cargo = new Cargo("","","","");
+    Cargo cargo = new Cargo("","","","","");
     DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -44,9 +45,10 @@ public class MyReceiver extends BroadcastReceiver {
         retrofitInterface = retrofit.create(RetrofitInterface.class);
         boolean find = false;
         int findTmp = 0;
+        int size;
         String findTmp1 = "";
         Log.i(TAG,"Intent Received:"+ intent.getAction());
-        if (intent.getAction()==SMS_RECEIVED){
+        if (intent.getAction().equals(SMS_RECEIVED)){
             Bundle dataBundle = intent.getExtras();
             if(dataBundle!=null){
                 Object[] mypdu = (Object[]) dataBundle.get("pdus");
@@ -62,6 +64,17 @@ public class MyReceiver extends BroadcastReceiver {
                     msg = msg.concat(message[i].getMessageBody());
                     tmpMsg = msg;
                     phoneNo = message[i].getOriginatingAddress();
+                    Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNo));
+                    Cursor c = context.getContentResolver().query(lookupUri, new String[]{ContactsContract.Data.DISPLAY_NAME},null,null,null);
+                    try {
+                        c.moveToFirst();
+                        String  displayName = c.getString(0);
+                        phoneNo = displayName;
+                        //Toast.makeText(context, ContactName, Toast.LENGTH_LONG).show();
+
+                    } catch (Exception e) {
+                        // TODO: handle exception
+                    }
                     if(i==0){
 
                         msg2 = msg.split(" ");
@@ -97,11 +110,12 @@ public class MyReceiver extends BroadcastReceiver {
                         db.getCargoList().get(findTmp).setCargo_status("Teslimata Çıktı");
                     }
                 }else {*/
-                    Integer size = db.getCargoList().size() + 1;
-                    cargo.setCargo_id(size.toString());
+                    size = db.getCargoList().size() + 1;
+                    cargo.setCargo_id(String.valueOf(size));
                     cargo.setCargo_name(phoneNo);
                     cargo.setCargo_no(findTmp1);
                     String date = df.format(Calendar.getInstance().getTime());
+                    cargo.setCargo_date(date);
                     insertedCargo.setCargoDate(date);
                     if (tmpMsg.contains("teslim ettik.")) {
                         insertedCargo.setCargoStatus("1");
@@ -131,11 +145,12 @@ public class MyReceiver extends BroadcastReceiver {
                         }
                         findTmp1 = msg2[0];
                     }
-                    Integer size = db.getCargoList().size() + 1;
-                    cargo.setCargo_id(size.toString());
+                    size = db.getCargoList().size() + 1;
+                    cargo.setCargo_id(String.valueOf(size));
                     cargo.setCargo_name(phoneNo);
                     cargo.setCargo_no(findTmp1);
                     String date = df.format(Calendar.getInstance().getTime());
+                    cargo.setCargo_date(date);
                     insertedCargo.setCargoDate(date);
                     if (tmpMsg.contains("teslim edilmiştir.")) {
                         insertedCargo.setCargoStatus("1");
@@ -165,12 +180,13 @@ public class MyReceiver extends BroadcastReceiver {
                         }
                         findTmp1 = msg2[5];
                     }
-                    Integer size = db.getCargoList().size() + 1;
-                    cargo.setCargo_id(size.toString());
+                    size = db.getCargoList().size() + 1;
+                    cargo.setCargo_id(String.valueOf(size));
                     cargo.setCargo_name(phoneNo);
                     cargo.setCargo_no(findTmp1);
                     String date = df.format(Calendar.getInstance().getTime());
                     insertedCargo.setCargoDate(date);
+                    cargo.setCargo_date(date);
                     if (tmpMsg.contains("teslim edilmiştir.")) {
                         insertedCargo.setCargoStatus("1");
                         cargo.setCargo_status("Teslim edildi");

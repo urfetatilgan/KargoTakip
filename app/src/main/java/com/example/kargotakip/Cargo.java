@@ -3,11 +3,12 @@ package com.example.kargotakip;
 public class Cargo {
     private String cargo_id, cargo_name, cargo_no, cargo_date, cargo_status;
 
-    public Cargo(String cargo_id, String cargo_name, String cargo_no, String cargo_status) {
+    public Cargo(String cargo_id, String cargo_name, String cargo_no, String cargo_status, String cargo_date) {
         this.cargo_id = cargo_id;
         this.cargo_name = cargo_name;
         this.cargo_no = cargo_no;
         this.cargo_status = cargo_status;
+        this.cargo_date = cargo_date;
     }
 
     public String getCargo_id() {
