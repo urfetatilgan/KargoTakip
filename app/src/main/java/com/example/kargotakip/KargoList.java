@@ -36,7 +36,7 @@ public class KargoList extends AppCompatActivity {
     ImageView ivCargo;
     private String username;
     private String password;
-    Button btnSave, btnList, btnDelete, btnEdit;
+    Button btnRefresh, btnList, btnDelete, btnEdit;
     RecyclerView rvCargo;
     GoogleSignInClient mGoogleSignInClient;
     String cargoID = "";
@@ -89,8 +89,9 @@ public class KargoList extends AppCompatActivity {
         etCargo = findViewById(R.id.et_Cargo);
         btnDelete = findViewById(R.id.btn_Delete);
         btnEdit = findViewById(R.id.btn_Edit);
+
         btnList = findViewById(R.id.btn_List);
-        //btnSave = findViewById(R.id.btn_Add);
+        btnRefresh = findViewById(R.id.btn_Refresh);
         rvCargo = findViewById(R.id.rv_Cargo);
     }
 
@@ -234,5 +235,12 @@ public class KargoList extends AppCompatActivity {
 
         //PyObject obj = pyObj.callAttr("arasBot", cargoList.get(0).getCargo_no());
         //etCargo.setText(obj.toString());
+    }
+    public void btn_Refresh(View view){
+        if(!girisBilgi.equals("0")){
+            Toast.makeText(this, "Google bağlantısız giriş yaptınız, mailler güncellenemiyor.", Toast.LENGTH_SHORT).show();;
+        }else{
+
+        }
     }
 }
