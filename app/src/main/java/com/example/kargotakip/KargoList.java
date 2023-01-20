@@ -226,6 +226,9 @@ public class KargoList extends AppCompatActivity {
         }else if(name.contains("SURAT")){
             startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse("https://www.mngkargo.com.tr/gonderitakip")));
+        }else if(name.contains("TRENDYOL")){
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://www.trendyolexpress.com/")));
         }
 
 
