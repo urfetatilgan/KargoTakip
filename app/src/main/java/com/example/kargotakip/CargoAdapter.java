@@ -1,8 +1,10 @@
 package com.example.kargotakip;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -51,6 +53,7 @@ public class CargoAdapter extends RecyclerView.Adapter<CargoAdapter.ViewHolder> 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView cargo_no , cargo_name, cargo_status;
         ImageView cargo_iv;
+        Button yol_ac;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -58,10 +61,12 @@ public class CargoAdapter extends RecyclerView.Adapter<CargoAdapter.ViewHolder> 
             cargo_name = itemView.findViewById(R.id.tv_CargoName);
             cargo_status = itemView.findViewById(R.id.tv_CargoStatus);
             cargo_iv = itemView.findViewById(R.id.iv_CargoImage);
+            yol_ac = itemView.findViewById(R.id.btn_YolAc);
             itemView.setTag(this);
             itemView.setOnClickListener(mOnItemClickListener);
         }
     }
+
 
     public void setOnItemClickListener(View.OnClickListener itemClickListener) {
         mOnItemClickListener = itemClickListener;

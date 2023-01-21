@@ -34,6 +34,7 @@ public class KargoList extends AppCompatActivity {
 
     TextView etCargo;
     ImageView ivCargo;
+    Cargo item;
     private String username;
     private String password;
     Button btnRefresh, btnList, btnDelete, btnEdit;
@@ -46,6 +47,7 @@ public class KargoList extends AppCompatActivity {
     ArrayList<Cargo> cargoList = new ArrayList<>();
     ArrayList<Cargo> cargoArrayList = new ArrayList<>();
     RelativeLayout relativeLayout;
+    Button yol_ac;
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
     private String BASE_URL = "https://afternoon-spire-41332.herokuapp.com";
@@ -54,6 +56,7 @@ public class KargoList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_kargo_list);
         //F_GetList();
+
         sp=getSharedPreferences("GirisBilgi",MODE_PRIVATE);
         editor=sp.edit();
         //username = sp.getString("username", "kullanıcı adı yok");
@@ -89,7 +92,7 @@ public class KargoList extends AppCompatActivity {
         etCargo = findViewById(R.id.et_Cargo);
         btnDelete = findViewById(R.id.btn_Delete);
         btnEdit = findViewById(R.id.btn_Edit);
-
+        yol_ac = findViewById(R.id.btn_YolAc);
         btnList = findViewById(R.id.btn_List);
         btnRefresh = findViewById(R.id.btn_Refresh);
         rvCargo = findViewById(R.id.rv_Cargo);
@@ -160,7 +163,7 @@ public class KargoList extends AppCompatActivity {
         public void onClick(View view) {
             RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
             int i = viewHolder.getAdapterPosition();
-            Cargo item;
+
             if(girisBilgi.equals("0")){
                 item = cargoArrayList.get(i);
             }else{
@@ -171,16 +174,14 @@ public class KargoList extends AppCompatActivity {
             cargoID = item.getCargo_id();
         }
     };
+    public void btn_YolAc(View view){
 
-    /*public void btn_Save_Click(View view) {
-        if (!etCargo.getText().toString().trim().equals("")) {
-            DBHelper db = new DBHelper(getApplicationContext());
-            db.addCargo(etCargo.getText().toString());
-
-            db.close();
-            etCargo.setText("");
-        }
-    }*/
+        RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+        Intent myIntent = new Intent(KargoList.this, CargoPath.class);
+        myIntent.putExtra("giris",girisBilgi);
+        myIntent.putExtra("kargoId",item.getCargo_no());
+        startActivity(myIntent);
+    }
 
     public void btn_Delete_Click(View view) {
         if (!cargoID.equals("")) {
@@ -242,5 +243,9 @@ public class KargoList extends AppCompatActivity {
         }else{
 
         }
+    }
+
+    public void btn_Settings(View view){
+        startActivity(new Intent(KargoList.this, Settings.class));
     }
 }

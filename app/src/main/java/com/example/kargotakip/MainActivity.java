@@ -131,8 +131,8 @@ public class MainActivity extends AppCompatActivity {
     }
     public void login_WithoutGoogle(View view){
         if(username.getText().toString().equals("admin") && password.getText().toString().equals("12345")){
-//            editor.putString("username",username.getText().toString());
-//            editor.putString("password",password.getText().toString());
+            editor.putString("username",username.getText().toString());
+            editor.putString("password",password.getText().toString());
             editor.putString("giris","1");
             editor.commit();
             Toast.makeText(getApplicationContext(), "Giriş Yaptınız",Toast.LENGTH_LONG).show();
