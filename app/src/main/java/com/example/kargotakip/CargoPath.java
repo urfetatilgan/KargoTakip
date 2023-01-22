@@ -1,6 +1,7 @@
 package com.example.kargotakip;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -33,39 +34,29 @@ public class CargoPath extends AppCompatActivity {
     private String girisBilgi = "";
     ArrayList<Cargo> cargoList = new ArrayList<>();
     ArrayList<Cargo> cargoArrayList = new ArrayList<>();
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
     private Retrofit retrofit;
     String kargoId;
     private RetrofitInterface retrofitInterface;
-    private String BASE_URL = "https://afternoon-spire-41332.herokuapp.com";
+    private String BASE_URL = "http://10.0.2.2:5000";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cargo_path);
-
+        sp=getSharedPreferences("GirisBilgi",MODE_PRIVATE);
+        editor=sp.edit();
         relativeLayout = findViewById(R.id.relat);
+        rvCargo = findViewById(R.id.rv_Cargo_path);
         Intent myIntent = getIntent();
         girisBilgi = myIntent.getStringExtra("giris");
         kargoId = myIntent.getStringExtra("kargoId");
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         retrofitInterface = retrofit.create(RetrofitInterface.class);
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(this);
-        if (acct != null) {
-            String personName = acct.getDisplayName();
-            String personGivenName = acct.getGivenName();
-            String personFamilyName = acct.getFamilyName();
-            String personEmail = acct.getEmail();
-            String token= acct.getIdToken();
-            //etCargo.setText(token);
-            String personId = acct.getId();
-        }
+
     }
     public void getList(View view) {
         f_getList();
@@ -76,7 +67,7 @@ public class CargoPath extends AppCompatActivity {
         cargoArrayList = new ArrayList<>();
         if(girisBilgi.equals("0")){
             try{
-                Call<List<CargoResults>> call = retrofitInterface.doGetUserList();
+                Call<List<CargoResults>> call = retrofitInterface.doGetUserListCargoPath(sp.getInt("user_id",-1),kargoId);
                 call.enqueue(new Callback<List<CargoResults>>() {
                     @Override
                     public void onResponse(Call<List<CargoResults>> call, Response<List<CargoResults>> response) {

@@ -64,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
-    private String BASE_URL = "https://afternoon-spire-41332.herokuapp.com";
+    private String BASE_URL = "http://10.0.2.2:5000";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,8 +152,8 @@ public class MainActivity extends AppCompatActivity {
 //        }else{
 //            Toast.makeText(getApplicationContext(), "Hatalı Giriş Yaptınız",Toast.LENGTH_LONG).show();
 //        }
-        editor.putString("giris","0");
-        editor.commit();
+
+
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startForResult.launch(signInIntent);
 
@@ -187,7 +187,32 @@ public class MainActivity extends AppCompatActivity {
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        // ...
+                        try {
+                            Call<Void> call = retrofitInterface.logout();
+                            call.enqueue(new Callback<Void>() {
+                                @Override
+                                public void onResponse(Call<Void> call, Response<Void> response) {
+                                    if (response.code() == 200) {
+                                        Toast.makeText(MainActivity.this,
+                                                "Signed out successfully", Toast.LENGTH_LONG).show();
+                                        editor.putInt("user_id",-1);
+                                        editor.commit();
+                                    } else if (response.code() == 400) {
+                                        Toast.makeText(MainActivity.this,
+                                                "Sign out error", Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                                @Override
+                                public void onFailure(Call<Void> call, Throwable t) {
+                                    Toast.makeText(MainActivity.this, t.getMessage(),
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            });
+//
+                        }catch (Exception e) {
+                            Log.w("tag", "handleSignInResult:error", e);
+                        }
+
                     }
                 });
     }
@@ -199,12 +224,15 @@ public class MainActivity extends AppCompatActivity {
             HashMap<String, String> map = new HashMap<>();
             map.put("idToken", idToken);
             map.put("authCode",authCode);
-            Call<Void> call = retrofitInterface.executeLogin(map);
-            call.enqueue(new Callback<Void>() {
+            Call<UserResult> call = retrofitInterface.executeLogin(map);
+            call.enqueue(new Callback<UserResult>() {
                 @Override
-                public void onResponse(Call<Void> call, Response<Void> response) {
+                public void onResponse(Call<UserResult> call, Response<UserResult> response) {
                     if (response.code() == 200) {
                         startActivity(new Intent(MainActivity.this, KargoList.class));
+                        editor.putString("giris","0");
+                        editor.putInt("user_id",response.body().user_id);
+                        editor.commit();
                         Toast.makeText(MainActivity.this,
                                 "Signed up successfully", Toast.LENGTH_LONG).show();
                     } else if (response.code() == 400) {
@@ -214,7 +242,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 @Override
-                public void onFailure(Call<Void> call, Throwable t) {
+                public void onFailure(Call<UserResult> call, Throwable t) {
                     Toast.makeText(MainActivity.this, t.getMessage(),
                             Toast.LENGTH_LONG).show();
                 }

@@ -50,7 +50,7 @@ public class KargoList extends AppCompatActivity {
     Button yol_ac;
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
-    private String BASE_URL = "https://afternoon-spire-41332.herokuapp.com";
+    private String BASE_URL = "http://10.0.2.2:5000";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,7 +108,7 @@ public class KargoList extends AppCompatActivity {
         cargoArrayList = new ArrayList<>();
         if(girisBilgi.equals("0")){
             try{
-                Call<List<CargoResults>> call = retrofitInterface.doGetUserList();
+                Call<List<CargoResults>> call = retrofitInterface.doGetUserList(sp.getInt("user_id",-1));
                 call.enqueue(new Callback<List<CargoResults>>() {
                     @Override
                     public void onResponse(Call<List<CargoResults>> call, Response<List<CargoResults>> response) {
@@ -241,7 +241,26 @@ public class KargoList extends AppCompatActivity {
         if(!girisBilgi.equals("0")){
             Toast.makeText(this, "Google bağlantısız giriş yaptınız, mailler güncellenemiyor.", Toast.LENGTH_SHORT).show();;
         }else{
-
+            try{
+                Call<Void> call = retrofitInterface.getMailsTrendyol(sp.getInt("user_id",-1));
+                call.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.code() == 200) {
+                            Toast.makeText(getApplicationContext(),
+                                    "Cargos from your mail added succesfully", Toast.LENGTH_LONG).show();
+                        } else if (response.code() == 400) {
+                            Toast.makeText(getApplicationContext(),
+                                    "Server Connection Error", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                    }
+                });
+            }catch (Exception e){
+                Log.i("TAG"   , "onResponse: "+e.toString());
+            }
         }
     }
 
