@@ -1,10 +1,16 @@
 package com.example.kargotakip;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
@@ -24,6 +30,8 @@ public class MyReceiver extends BroadcastReceiver {
     private static final String TAG = "SmsBroadcastReceiver";
     public static final String DATABASE_NAME = "my_cargo.db";
     private static final int DATABASE_VERSION = 1;
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
     private String BASE_URL = "https://afternoon-spire-41332.herokuapp.com";
@@ -34,6 +42,8 @@ public class MyReceiver extends BroadcastReceiver {
     DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
     @Override
     public void onReceive(Context context, Intent intent) {
+        sp=context.getSharedPreferences("GirisBilgi",MODE_PRIVATE);
+        editor=sp.edit();
         DBHelper db = new DBHelper(context);
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -198,7 +208,7 @@ public class MyReceiver extends BroadcastReceiver {
                     insertedCargo.setCargoNo(cargo.getCargo_no());
                     insertedCargo.setCargoFrom("0");//From Sms
                     try {
-                        Call<Void> call = retrofitInterface.insertCargo(insertedCargo);
+                        Call<Void> call = retrofitInterface.insertCargo(insertedCargo,sp.getInt("user_id",-1));
                         call.enqueue(new Callback<Void>() {
                             @Override
                             public void onResponse(Call<Void> call, Response<Void> response) {

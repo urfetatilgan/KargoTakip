@@ -108,7 +108,7 @@ public class KargoList extends AppCompatActivity {
         cargoArrayList = new ArrayList<>();
         if(girisBilgi.equals("0")){
             try{
-                Call<List<CargoResults>> call = retrofitInterface.doGetUserList();
+                Call<List<CargoResults>> call = retrofitInterface.doGetUserList(sp.getInt("user_id",-1));
                 call.enqueue(new Callback<List<CargoResults>>() {
                     @Override
                     public void onResponse(Call<List<CargoResults>> call, Response<List<CargoResults>> response) {
@@ -127,7 +127,6 @@ public class KargoList extends AppCompatActivity {
                                     cargoArrayList.add(savedCargo);
                                 }
                             }
-                            ;
                             CargoAdapter adp = new CargoAdapter(getApplicationContext(), cargoArrayList);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                             rvCargo.setLayoutManager(layoutManager);
