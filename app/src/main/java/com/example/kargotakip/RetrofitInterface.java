@@ -24,7 +24,5 @@ public interface RetrofitInterface {
     @GET("/api/cargos/cargoPath")
     Call<List<CargoResults>> doGetUserListCargoPath(@Query("user_id") int user_id,@Query("cargo_id") String cargo_id);
     @POST("/api/cargo/add")
-    Call<Void> insertCargo(@Body CargoResults cargoResults);
-    @GET("/api/mail/user/Trendyol")
-    Call<Void> getMailsTrendyol ();
+    Call<Void> insertCargo(@Body CargoResults cargoResults,@Query("user_id")  int id);
 }

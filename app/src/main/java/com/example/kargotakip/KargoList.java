@@ -175,12 +175,16 @@ public class KargoList extends AppCompatActivity {
         }
     };
     public void btn_YolAc(View view){
+        if(!etCargo.getText().toString().equals("")){
+            RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+            Intent myIntent = new Intent(KargoList.this, CargoPath.class);
+            myIntent.putExtra("giris",girisBilgi);
+            myIntent.putExtra("kargoId",item.getCargo_no());
+            startActivity(myIntent);
+        }else{
+            Toast.makeText(getApplicationContext(),"Kargo seçmediniz!",Toast.LENGTH_SHORT).show();
+        }
 
-        RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
-        Intent myIntent = new Intent(KargoList.this, CargoPath.class);
-        myIntent.putExtra("giris",girisBilgi);
-        myIntent.putExtra("kargoId",item.getCargo_no());
-        startActivity(myIntent);
     }
 
     public void btn_Delete_Click(View view) {
@@ -242,7 +246,7 @@ public class KargoList extends AppCompatActivity {
             Toast.makeText(this, "Google bağlantısız giriş yaptınız, mailler güncellenemiyor.", Toast.LENGTH_SHORT).show();;
         }else{
             try{
-                Call<Void> call = retrofitInterface.getMailsTrendyol();
+                Call<Void> call = retrofitInterface.getMailsTrendyol(sp.getInt("user_id",-1));
                 call.enqueue(new Callback<Void>() {
                     @Override
                     public void onResponse(Call<Void> call, Response<Void> response) {

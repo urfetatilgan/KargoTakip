@@ -12,10 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +36,7 @@ public class CargoPath extends AppCompatActivity {
     private Retrofit retrofit;
     String kargoId;
     private RetrofitInterface retrofitInterface;
-    private String BASE_URL = "http://10.0.2.2:5000";
+    private String BASE_URL = "https://afternoon-spire-41332.herokuapp.com";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     Button buttonGiris, buttonGirisWoutGoogle;
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInAccount account;
+
     ActivityResultLauncher<Intent> startForResult = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Retrofit retrofit;
     private RetrofitInterface retrofitInterface;
-    private String BASE_URL = "http://10.0.2.2:5000";
+    private String BASE_URL = "https://afternoon-spire-41332.herokuapp.com";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,7 +132,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void login_WithoutGoogle(View view){
-        if(username.getText().toString().equals("admin") && password.getText().toString().equals("12345")){
+        DBHelper db = new DBHelper(getApplicationContext());
+        if(username.getText().toString().equals(db.getUser().getUsername()) && password.getText().toString().equals(db.getUser().getPassword())){
             editor.putString("username",username.getText().toString());
             editor.putString("password",password.getText().toString());
             editor.putString("giris","1");
@@ -154,9 +156,19 @@ public class MainActivity extends AppCompatActivity {
 //            Toast.makeText(getApplicationContext(), "Hatalı Giriş Yaptınız",Toast.LENGTH_LONG).show();
 //        }
 
+        DBHelper db = new DBHelper(getApplicationContext());
+        if(username.getText().toString().equals(db.getUser().getUsername()) && password.getText().toString().equals(db.getUser().getPassword())){
+            editor.putString("username",username.getText().toString());
+            editor.putString("password",password.getText().toString());
+            editor.putString("giris","1");
+            editor.commit();
+            Toast.makeText(getApplicationContext(), "Giriş Yaptınız",Toast.LENGTH_LONG).show();
+            Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+            startForResult.launch(signInIntent);
+        }else{
+            Toast.makeText(getApplicationContext(), "Hatalı Giriş Yaptınız",Toast.LENGTH_LONG).show();
+        }
 
-        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-        startForResult.launch(signInIntent);
 
 //        startActivityForResult(signInIntent, 1000);
 

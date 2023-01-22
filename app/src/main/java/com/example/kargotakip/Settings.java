@@ -37,7 +37,9 @@ public class Settings extends AppCompatActivity {
     }
     public void change(View view){
         if (username.equals(oldName.getText().toString()) && password.equals(oldPassword.getText().toString())){
-            Toast.makeText(this, "Kayıt Başarılı!", Toast.LENGTH_SHORT).show();
+            DBHelper db = new DBHelper(getApplicationContext());
+            User user = new User("1", newName.getText().toString(), newPassword.getText().toString());
+            db.updateUser(user);
             count = 0;
 //            editor.putString("username",newName.getText().toString());
 //            editor.putString("password",newPassword.getText().toString());
