@@ -138,6 +138,8 @@ public class DBHelper extends SQLiteOpenHelper {
             data.add(new User(c.getString(c.getColumnIndex(TablesInfo.UserEntry.COLUMN_ID)), c.getString(c.getColumnIndex(TablesInfo.UserEntry.COLUMN_NAME)), c.getString(c.getColumnIndex(TablesInfo.UserEntry.COLUMN_PASSWORD))));
         }
         User user = new User(data.get(0).getId(),data.get(0).getUsername(),data.get(0).getPassword());
+        db.close();
+        c.close();
         return user;
     }
 }
