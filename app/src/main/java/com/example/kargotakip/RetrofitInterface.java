@@ -19,4 +19,6 @@ public interface RetrofitInterface {
     Call<List<CargoResults>> doGetUserList();
     @POST("/api/cargo/add")
     Call<Void> insertCargo(@Body CargoResults cargoResults);
+    @GET("/api/mail/user/Trendyol")
+    Call<Void> getMailsTrendyol ();
 }

@@ -127,6 +127,7 @@ public class KargoList extends AppCompatActivity {
                                     cargoArrayList.add(savedCargo);
                                 }
                             }
+                            ;
                             CargoAdapter adp = new CargoAdapter(getApplicationContext(), cargoArrayList);
                             LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
                             rvCargo.setLayoutManager(layoutManager);
@@ -241,7 +242,26 @@ public class KargoList extends AppCompatActivity {
         if(!girisBilgi.equals("0")){
             Toast.makeText(this, "Google bağlantısız giriş yaptınız, mailler güncellenemiyor.", Toast.LENGTH_SHORT).show();;
         }else{
-
+            try{
+                Call<Void> call = retrofitInterface.getMailsTrendyol();
+                call.enqueue(new Callback<Void>() {
+                    @Override
+                    public void onResponse(Call<Void> call, Response<Void> response) {
+                        if (response.code() == 200) {
+                            Toast.makeText(getApplicationContext(),
+                                    "Cargos from your mail added succesfully", Toast.LENGTH_LONG).show();
+                        } else if (response.code() == 400) {
+                            Toast.makeText(getApplicationContext(),
+                                    "Server Connection Error", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<Void> call, Throwable t) {
+                    }
+                });
+            }catch (Exception e){
+                Log.i("TAG"   , "onResponse: "+e.toString());
+            }
         }
     }
 

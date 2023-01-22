@@ -69,6 +69,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)!= PackageManager.PERMISSION_GRANTED){
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.RECEIVE_SMS)){
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS},MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
+            }
+        }
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)!= PackageManager.PERMISSION_GRANTED){
+//            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_CONTACTS)){
+//                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS},MY_PERMISSIONS_REQUEST_READ_CONTACT);
+//            }
+//        }
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestScopes(new Scope(Scopes.DRIVE_APPFOLDER),new Scope(Scopes.EMAIL),new Scope("https://www.googleapis.com/auth/gmail.readonly"))
                 .requestServerAuthCode(getString(R.string.server_client_id))
@@ -86,16 +96,7 @@ public class MainActivity extends AppCompatActivity {
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECEIVE_SMS)!= PackageManager.PERMISSION_GRANTED){
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.RECEIVE_SMS)){
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECEIVE_SMS},MY_PERMISSIONS_REQUEST_RECEIVE_SMS);
-            }
-        }
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)!= PackageManager.PERMISSION_GRANTED){
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.READ_CONTACTS)){
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS},MY_PERMISSIONS_REQUEST_READ_CONTACT);
-            }
-        }
+
 
 
 
@@ -118,12 +119,12 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_RECEIVE_SMS:
-            case MY_PERMISSIONS_REQUEST_READ_CONTACT:{
+            //case MY_PERMISSIONS_REQUEST_READ_CONTACT:
+            case MY_PERMISSIONS_REQUEST_RECEIVE_SMS: {
                 if(grantResults.length>0 && grantResults[0]==PackageManager.PERMISSION_GRANTED){
-                    Toast.makeText(this,"thx!!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,"İzin alındı!!",Toast.LENGTH_SHORT).show();
                 }else{
-                    Toast.makeText(this, "sorry!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "İzin alınamadı!!", Toast.LENGTH_SHORT).show();
                 }
 
             }

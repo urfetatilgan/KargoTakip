@@ -3,11 +3,8 @@ package com.example.kargotakip;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
@@ -34,7 +31,7 @@ public class MyReceiver extends BroadcastReceiver {
     String[] msg2;
     CargoResults insertedCargo= new CargoResults("","","");
     Cargo cargo = new Cargo("","","","","");
-    DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+    DateFormat df = new SimpleDateFormat("yyyy/MM/dd");
     @Override
     public void onReceive(Context context, Intent intent) {
         DBHelper db = new DBHelper(context);
@@ -64,17 +61,17 @@ public class MyReceiver extends BroadcastReceiver {
                     msg = msg.concat(message[i].getMessageBody());
                     tmpMsg = msg;
                     phoneNo = message[i].getOriginatingAddress();
-                    Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNo));
-                    Cursor c = context.getContentResolver().query(lookupUri, new String[]{ContactsContract.Data.DISPLAY_NAME},null,null,null);
-                    try {
-                        c.moveToFirst();
-                        String  displayName = c.getString(0);
-                        phoneNo = displayName;
-                        //Toast.makeText(context, ContactName, Toast.LENGTH_LONG).show();
-
-                    } catch (Exception e) {
-                        // TODO: handle exception
-                    }
+//                    Uri lookupUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNo));
+//                    Cursor c = context.getContentResolver().query(lookupUri, new String[]{ContactsContract.Data.DISPLAY_NAME},null,null,null);
+//                    try {
+//                        c.moveToFirst();
+//                        String  displayName = c.getString(0);
+//                        phoneNo = displayName;
+//                        //Toast.makeText(context, ContactName, Toast.LENGTH_LONG).show();
+//
+//                    } catch (Exception e) {
+//                        // TODO: handle exception
+//                    }
                     if(i==0){
 
                         msg2 = msg.split(" ");
