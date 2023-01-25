@@ -56,6 +56,17 @@
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tv_CargoDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_CargoStatus"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:text="Kargo"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 
 </RelativeLayout>

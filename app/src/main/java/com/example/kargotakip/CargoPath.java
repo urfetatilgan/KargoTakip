@@ -101,7 +101,19 @@ public class CargoPath extends AppCompatActivity {
                 Log.i("TAG"   , "onResponse: "+e.toString());
             }
         }else{
-            CargoAdapter adp = new CargoAdapter(getApplicationContext(), cargoList);
+            ArrayList<Cargo> cargoPath = new ArrayList<>();
+            for(int i=0; i<cargoList.size(); i++){
+                if(cargoList.get(i).getCargo_no().equals(kargoId) && cargoList.get(i).getCargo_status().equals("1")){
+                    Cargo savedCargo= null;
+                    savedCargo = new Cargo(cargoList.get(i).getCargo_id(),cargoList.get(i).getCargo_name(),cargoList.get(i).getCargo_no(),"Teslim edildi", cargoList.get(i).getCargo_date());
+                    cargoPath.add(savedCargo);
+                }else if(cargoList.get(i).getCargo_no().equals(kargoId)){
+                    Cargo savedCargo= null;
+                    savedCargo = new Cargo(cargoList.get(i).getCargo_id(),cargoList.get(i).getCargo_name(),cargoList.get(i).getCargo_no(),"Yoldayız", cargoList.get(i).getCargo_date());
+                    cargoPath.add(savedCargo);
+                }
+            }
+            CargoAdapter adp = new CargoAdapter(getApplicationContext(), cargoPath);
             LinearLayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
             rvCargo.setLayoutManager(layoutManager);
             //rvCargo.setHasFixedSize(true);

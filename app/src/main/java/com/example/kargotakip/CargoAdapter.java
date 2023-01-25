@@ -34,6 +34,7 @@ public class CargoAdapter extends RecyclerView.Adapter<CargoAdapter.ViewHolder> 
         holder.cargo_no.setText(mList.get(position).getCargo_no());
         holder.cargo_name.setText(mList.get(position).getCargo_name());
         holder.cargo_status.setText(mList.get(position).getCargo_status());
+        holder.cargo_date.setText(mList.get(position).getCargo_date());
         if(mList.get(position).getCargo_name().contains("ARAS")){
             holder.cargo_iv.setImageResource(R.drawable.aras);
         }else if(mList.get(position).getCargo_name().contains("MNG")){
@@ -51,7 +52,7 @@ public class CargoAdapter extends RecyclerView.Adapter<CargoAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView cargo_no , cargo_name, cargo_status;
+        TextView cargo_no , cargo_name, cargo_status, cargo_date;
         ImageView cargo_iv;
         Button yol_ac;
 
@@ -60,6 +61,7 @@ public class CargoAdapter extends RecyclerView.Adapter<CargoAdapter.ViewHolder> 
             cargo_no = itemView.findViewById(R.id.tv_CargoNo);
             cargo_name = itemView.findViewById(R.id.tv_CargoName);
             cargo_status = itemView.findViewById(R.id.tv_CargoStatus);
+            cargo_date = itemView.findViewById(R.id.tv_CargoDate);
             cargo_iv = itemView.findViewById(R.id.iv_CargoImage);
             yol_ac = itemView.findViewById(R.id.btn_YolAc);
             itemView.setTag(this);
