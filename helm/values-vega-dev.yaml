@@ -1,0 +1,33 @@
+# "dev" (vega-dev) env values.
+llm-deployment:
+  # nyx-deployment: 50881ac1-3268-4527-8375-85c937bc3203
+  enabled: true
+  nameOverride: llm-deployment
+  config:
+    solutionSlug: llm-deployment
+    environmentSlug: vega-dev
+  image:
+    repository: repo
+    tag: 1.4.0
+  env:
+    NYX_ENABLED: 'false'
+    GAIA_APPLICATION_CODE: UK2520
+  ingress:
+    enabled: true
+    className: ''
+    host: devisbank
+    paths:
+    - pathType: Prefix
+      path: /ingress
+    annotations:
+      haproxy.router.openshift.io/rewrite-target: /
+    tls:
+      enabled: false
+      secretName: ''
+  secrets:
+    conjur:
+      enabled: false
+  ipa:
+    enabled: false
+  redis:
+    enabled: true

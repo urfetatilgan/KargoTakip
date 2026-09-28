@@ -1,0 +1,34 @@
+{
+  "trustedIssuers" : [ {
+    "id" : "UserIam",
+    "name" : "User IAM ",
+    "issuer" : "http://user.idp.iam.local:8080/realms/nyx",
+    "audiences" : null,
+    "tokenEndpoint" : null
+  }, {
+    "id" : "AppCS",
+    "name" : "App Iam",
+    "issuer" : "https://auth0.dev/",
+    "audiences" : null,
+    "tokenEndpoint" : null
+  }, {
+    "id" : "PLTCS",
+    "name" : "Platform Iam",
+    "issuer" : "https://iam.internal.com/realms/platform",
+    "audiences" : null,
+    "tokenEndpoint" : null
+  }, {
+    "id" : "DEVIAM",
+    "name" : "Dev Iam",
+    "issuer" : "https://iam.local/realms/dev/",
+    "audiences" : null,
+    "tokenEndpoint" : null
+  } ],
+  "tokenTargets" : [ {
+    "id" : "UserIam",
+    "name" : "User IAM ",
+    "issuer" : "http://user.idp.iam.local:8080/realms/nyx",
+    "audiences" : null,
+    "tokenEndpoint" : "http://user.idp.iam.local:8080/realms/nyx/protocol/openid-connect/token"
+  } ]
+}

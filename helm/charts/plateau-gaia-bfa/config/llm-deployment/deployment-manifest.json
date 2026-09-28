@@ -1,0 +1,7 @@
+{
+  "manifestVersion" : "1.0",
+  "scope" : "solution",
+  "solutionSlug" : "llm-deployment",
+  "generatedAt" : "2026-09-28T00:16:50.011541300Z",
+  "files" : [ "helm/charts/plateau-gaia-bfa/Chart.yaml", "helm/charts/plateau-gaia-bfa/config/llm-deployment/deployment-manifest.json", "helm/charts/plateau-gaia-bfa/config/llm-deployment/vega-dev/auth-servers.gwcjson", "helm/charts/plateau-gaia-bfa/config/llm-deployment/vega-dev/gateway-ep-config.gwcjson", "helm/charts/plateau-gaia-bfa/config/llm-deployment/vega-dev/permissions.gwcjson", "helm/charts/plateau-gaia-bfa/config/llm-deployment/vega-dev/tls-profiles.gwcjson", "helm/charts/plateau-gaia-bfa/config/llm-deployment/vega-dev/tools-routes.gwcjson", "helm/charts/plateau-gaia-bfa/templates/_helpers.tpl", "helm/charts/plateau-gaia-bfa/templates/configmap-ipa-policies.yaml", "helm/charts/plateau-gaia-bfa/templates/configmap-ipa.yaml", "helm/charts/plateau-gaia-bfa/templates/configmap.yaml", "helm/charts/plateau-gaia-bfa/templates/deployment.yaml", "helm/charts/plateau-gaia-bfa/templates/ingress.yaml", "helm/charts/plateau-gaia-bfa/templates/redis.yaml", "helm/charts/plateau-gaia-bfa/templates/secret.yaml", "helm/charts/plateau-gaia-bfa/templates/service.yaml", "helm/charts/plateau-gaia-bfa/values.schema.json", "helm/charts/plateau-gaia-bfa/values.yaml" ]
+}

@@ -1,0 +1,163 @@
+{
+  "permissions" : [ {
+    "id" : "Test permission",
+    "name" : "Test permission",
+    "decisionStrategy" : "AFFIRMATIVE",
+    "policies" : [ {
+      "name" : "New OIDC Token Check Policy",
+      "appliesOn" : "OIDC_TOKEN",
+      "issuer" : "http://localhost:8080/realms/nyx",
+      "client" : "",
+      "logic" : "POSITIVE",
+      "method" : {
+        "type" : "hasAuthority",
+        "args" : [ {
+          "key" : "scopes",
+          "values" : [ "oidc" ]
+        } ]
+      }
+    } ]
+  }, {
+    "id" : "AI Chat Completion Permission",
+    "name" : "AI Chat Completion Permission",
+    "decisionStrategy" : "UNANIMOUS",
+    "policies" : [ {
+      "name" : "AI API Access Policy",
+      "appliesOn" : "API_KEY",
+      "issuer" : null,
+      "client" : null,
+      "logic" : "POSITIVE",
+      "method" : {
+        "type" : "hasAuthority",
+        "args" : [ {
+          "key" : "scopes",
+          "values" : [ "api-key" ]
+        } ]
+      }
+    }, {
+      "name" : "Platform Users Policy",
+      "appliesOn" : "API_KEY",
+      "issuer" : null,
+      "client" : null,
+      "logic" : "POSITIVE",
+      "method" : {
+        "type" : "hasAuthority",
+        "args" : [ {
+          "key" : "scopes",
+          "values" : [ "api-key" ]
+        } ]
+      }
+    } ]
+  }, {
+    "id" : "Admin API Permission",
+    "name" : "Admin API Permission",
+    "decisionStrategy" : "AFFIRMATIVE",
+    "policies" : [ {
+      "name" : "Admin Only Policy",
+      "appliesOn" : "OIDC_TOKEN",
+      "issuer" : "https://auth.plateaux.com/realms/nyx",
+      "client" : "gw-admin-client",
+      "logic" : "POSITIVE",
+      "method" : {
+        "type" : "memberOfUserGroup",
+        "args" : [ {
+          "key" : "groups",
+          "values" : [ "someUserGroup,someDepartment" ]
+        } ]
+      }
+    }, {
+      "name" : "Internal Service Policy",
+      "appliesOn" : "OIDC_TOKEN",
+      "issuer" : "https://auth.plateaux.com/realms/nyx",
+      "client" : "gw-internal-client",
+      "logic" : "POSITIVE",
+      "method" : {
+        "type" : "memberOfUserGroup",
+        "args" : [ {
+          "key" : "groups",
+          "values" : [ "internalUserGroup,internalDepartments" ]
+        } ]
+      }
+    } ]
+  }, {
+    "id" : "Read Only Permission",
+    "name" : "Read Only Permission",
+    "decisionStrategy" : "CONSENSUS",
+    "policies" : [ {
+      "name" : "AI API Access Policy",
+      "appliesOn" : "API_KEY",
+      "issuer" : null,
+      "client" : null,
+      "logic" : "POSITIVE",
+      "method" : {
+        "type" : "hasAuthority",
+        "args" : [ {
+          "key" : "scopes",
+          "values" : [ "api-key" ]
+        } ]
+      }
+    }, {
+      "name" : "Developer Access Policy",
+      "appliesOn" : "OIDC_TOKEN",
+      "issuer" : "https://iam.internal.com/realms/platform",
+      "client" : "gw-dev-client",
+      "logic" : "POSITIVE",
+      "method" : {
+        "type" : "memberOfUserGroup",
+        "args" : [ {
+          "key" : "groups",
+          "values" : [ "he,orShe" ]
+        } ]
+      }
+    } ]
+  }, {
+    "id" : "Internal Service Permission",
+    "name" : "Internal Service Permission",
+    "decisionStrategy" : "UNANIMOUS",
+    "policies" : [ {
+      "name" : "Internal Service Policy",
+      "appliesOn" : "OIDC_TOKEN",
+      "issuer" : "https://auth.plateaux.com/realms/nyx",
+      "client" : "gw-internal-client",
+      "logic" : "POSITIVE",
+      "method" : {
+        "type" : "memberOfUserGroup",
+        "args" : [ {
+          "key" : "groups",
+          "values" : [ "internalUserGroup,internalDepartments" ]
+        } ]
+      }
+    } ]
+  }, {
+    "id" : "Developer Permission",
+    "name" : "Developer Permission",
+    "decisionStrategy" : "AFFIRMATIVE",
+    "policies" : [ {
+      "name" : "Developer Access Policy",
+      "appliesOn" : "OIDC_TOKEN",
+      "issuer" : "https://iam.internal.com/realms/platform",
+      "client" : "gw-dev-client",
+      "logic" : "POSITIVE",
+      "method" : {
+        "type" : "memberOfUserGroup",
+        "args" : [ {
+          "key" : "groups",
+          "values" : [ "he,orShe" ]
+        } ]
+      }
+    }, {
+      "name" : "Platform Users Policy",
+      "appliesOn" : "API_KEY",
+      "issuer" : null,
+      "client" : null,
+      "logic" : "POSITIVE",
+      "method" : {
+        "type" : "hasAuthority",
+        "args" : [ {
+          "key" : "scopes",
+          "values" : [ "api-key" ]
+        } ]
+      }
+    } ]
+  } ]
+}
