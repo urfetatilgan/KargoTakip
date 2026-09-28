@@ -1,0 +1,74 @@
+{
+  "tlsProfiles" : [ {
+    "id" : "20db3dad-ec2c-4c7f-856c-9208100027f8",
+    "tlsType" : "ONE_WAY",
+    "tlsVersion" : "TLSv1.3",
+    "skipVerify" : false,
+    "truststore" : {
+      "path" : "certs/fallback-truststore-v2",
+      "certificateAlias" : "certificate",
+      "providerId" : "sp-003",
+      "providerType" : "VAULT"
+    },
+    "keystore" : null,
+    "fallbackProfileRefs" : null
+  }, {
+    "id" : "4135fff2-6b00-4e7f-a05e-053980c90ee7",
+    "tlsType" : "ONE_WAY",
+    "tlsVersion" : "TLSv1.2",
+    "skipVerify" : false,
+    "truststore" : {
+      "path" : "certs/probe-test",
+      "certificateAlias" : "certificate",
+      "providerId" : "sp-003",
+      "providerType" : "VAULT"
+    },
+    "keystore" : null,
+    "fallbackProfileRefs" : null
+  }, {
+    "id" : "46168f8a-96b8-4081-a0d3-2b6c4ff95e38",
+    "tlsType" : "ONE_WAY",
+    "tlsVersion" : "TLSv1.3",
+    "skipVerify" : false,
+    "truststore" : {
+      "path" : "certs/probe-test",
+      "certificateAlias" : "certificate",
+      "providerId" : "sp-003",
+      "providerType" : "VAULT"
+    },
+    "keystore" : null,
+    "fallbackProfileRefs" : null
+  }, {
+    "id" : "4c2c6b1f-e614-48aa-93ad-4195e5bda21f",
+    "tlsType" : "MTLS",
+    "tlsVersion" : "TLSv1.3",
+    "skipVerify" : false,
+    "truststore" : {
+      "path" : "certs/mtls-truststore-v2",
+      "certificateAlias" : "certificate",
+      "providerId" : "sp-003",
+      "providerType" : "VAULT"
+    },
+    "keystore" : {
+      "path" : "certs/mtls-keystore",
+      "certificateAlias" : "certificate",
+      "privateKeyAlias" : "private_key",
+      "providerId" : "sp-003",
+      "providerType" : "VAULT"
+    },
+    "fallbackProfileRefs" : null
+  }, {
+    "id" : "c466eb98-59c8-4cbf-9f55-01712ca868ae",
+    "tlsType" : "ONE_WAY",
+    "tlsVersion" : "TLSv1.3",
+    "skipVerify" : false,
+    "truststore" : {
+      "path" : "certs/expired-truststore",
+      "certificateAlias" : "certificate",
+      "providerId" : "sp-003",
+      "providerType" : "VAULT"
+    },
+    "keystore" : null,
+    "fallbackProfileRefs" : null
+  } ]
+}

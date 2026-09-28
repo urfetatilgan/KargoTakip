@@ -1,0 +1,54 @@
+{
+  "gateway" : {
+    "id" : "llm-deployment",
+    "name" : "llm-deployment",
+    "base_url" : "http://devisbank/ingress"
+  },
+  "entry_points" : [ {
+    "id" : "51e46479-ef00-435c-8a08-6162826efede",
+    "name" : "llm-route-1",
+    "protocol" : "SOAP",
+    "consumerEndpoint" : {
+      "path" : "/api/v1/llm"
+    },
+    "upstreams" : [ {
+      "id" : "llm-soap",
+      "name" : "llm-soap",
+      "constraints" : {
+        "timeout_ms" : 1000000,
+        "max_response_size" : null,
+        "quota" : [ {
+          "period" : "1m",
+          "request_limit" : 10
+        } ],
+        "circuit_breaker" : null
+      },
+      "invocation" : {
+        "methods" : [ ],
+        "path" : null,
+        "operation_name" : null,
+        "soap_action" : null,
+        "wsdl_url" : null
+      },
+      "routing" : {
+        "route_id" : "llm-soap",
+        "tls_profile" : null,
+        "signing_profile" : null,
+        "base_url" : null,
+        "propagate_uri" : null,
+        "fallback_route_id" : null
+      },
+      "upstreamServiceId" : "b844ee2a-1e92-48d0-afa8-5c9d7fc5f5ba"
+    } ],
+    "filters" : [ ],
+    "auth" : {
+      "type" : "API_KEY",
+      "permissions" : [ "Developer Permission" ]
+    },
+    "rate_limit" : {
+      "request_limit" : 150,
+      "period" : "1m",
+      "limit_by" : [ ]
+    }
+  } ]
+}

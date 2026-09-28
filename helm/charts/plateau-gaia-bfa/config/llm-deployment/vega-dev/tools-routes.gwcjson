@@ -1,0 +1,112 @@
+[ {
+  "route" : {
+    "id" : "llm-soap",
+    "from" : {
+      "uri" : "direct:llm-soap",
+      "steps" : [ {
+        "setProperty" : {
+          "name" : "originalInput",
+          "simple" : "${body}"
+        }
+      }, {
+        "setUpstreamAuthBy" : {
+          "basic" : {
+            "username" : "soapUser",
+            "passwordRef" : "VAULT:credentials/soap-students-basic:password"
+          }
+        }
+      }, {
+        "choice" : {
+          "when" : [ {
+            "simple" : "${header.X-Soap-Operation} == 'AllStudents'",
+            "steps" : [ {
+              "setBody" : {
+                "simple" : "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:tns=\"http://www.howtodoinjava.com/xml/school\">\n  <soapenv:Header/>\n  <soapenv:Body>\n    <tns:AllStudentsRequest>\n      <!-- giriş alanları -->\n    </tns:AllStudentsRequest>\n  </soapenv:Body>\n</soapenv:Envelope>"
+              }
+            }, {
+              "setHeader" : {
+                "name" : "Content-Type",
+                "constant" : "text/xml;charset=UTF-8"
+              }
+            }, {
+              "setHeader" : {
+                "name" : "SOAPAction",
+                "constant" : "\"AllStudents\""
+              }
+            }, {
+              "kamelet" : {
+                "name" : "plateau-soap-invoke-action",
+                "parameters" : {
+                  "url" : "https://host.docker.internal:4024/soap/students",
+                  "soapAction" : "AllStudents",
+                  "soapVersion" : "1.1",
+                  "socketTimeoutMs" : 30000,
+                  "connectionRequestTimeoutMs" : 2000,
+                  "tlsProfileRef" : "4c2c6b1f-e614-48aa-93ad-4195e5bda21f"
+                }
+              }
+            }, {
+              "convertBodyTo" : {
+                "type" : "java.lang.String"
+              }
+            } ]
+          }, {
+            "simple" : "${header.X-Soap-Operation} == 'StudentDetails'",
+            "steps" : [ {
+              "process" : {
+                "ref" : "soapConsumerInputProcessor"
+              }
+            }, {
+              "setProperty" : {
+                "name" : "GW_XML_ESCAPE_INPUT",
+                "constant" : "true"
+              }
+            }, {
+              "process" : {
+                "ref" : "xmlEscapeProcessor"
+              }
+            }, {
+              "setBody" : {
+                "simple" : "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:tns=\"http://www.howtodoinjava.com/xml/school\">\n  <soapenv:Header/>\n  <soapenv:Body>\n    <tns:StudentDetailsRequest>\n      <tns:name>${exchangeProperty.originalInput[name]}</tns:name>\n    </tns:StudentDetailsRequest>\n  </soapenv:Body>\n</soapenv:Envelope>"
+              }
+            }, {
+              "setHeader" : {
+                "name" : "Content-Type",
+                "constant" : "text/xml;charset=UTF-8"
+              }
+            }, {
+              "setHeader" : {
+                "name" : "SOAPAction",
+                "constant" : "\"StudentDetails\""
+              }
+            }, {
+              "kamelet" : {
+                "name" : "plateau-soap-invoke-action",
+                "parameters" : {
+                  "url" : "https://host.docker.internal:4024/soap/students",
+                  "soapAction" : "StudentDetails",
+                  "soapVersion" : "1.1",
+                  "socketTimeoutMs" : 30000,
+                  "connectionRequestTimeoutMs" : 2000,
+                  "tlsProfileRef" : "4c2c6b1f-e614-48aa-93ad-4195e5bda21f"
+                }
+              }
+            }, {
+              "convertBodyTo" : {
+                "type" : "java.lang.String"
+              }
+            } ]
+          } ],
+          "otherwise" : {
+            "steps" : [ {
+              "throwException" : {
+                "exceptionType" : "java.lang.IllegalArgumentException",
+                "message" : "Unknown SOAP operation: '${header.X-Soap-Operation}'. Set the X-Soap-Operation header to one of: AllStudents, StudentDetails"
+              }
+            } ]
+          }
+        }
+      } ]
+    }
+  }
+} ]
